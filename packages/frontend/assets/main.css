@@ -20,3 +20,9 @@
         'opsz' 24;
     font-size: inherit;
 }
+
+.form-control-dark {
+    background: black !important;
+    border-color: rgb(53, 53, 53);
+    color: white !important;
+}
