@@ -1,0 +1,7 @@
+{
+    "name": "calhacks2024",
+    "private": true,
+    "workspaces": [
+      "packages/*"
+    ]
+  }
