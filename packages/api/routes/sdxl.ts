@@ -1,5 +1,5 @@
 import { BedrockRuntimeClient, InvokeModelCommand } from "@aws-sdk/client-bedrock-runtime";
-import express from "express";
+import express, { type RequestHandler } from "express";
 
 const client = new BedrockRuntimeClient({
     credentials: {
@@ -39,15 +39,11 @@ async function generateImage(prompt: string) {
     return Buffer.from(b64, "base64");
 }
 
-const app = express();
-
-app.get("/sdxl", async (req, res) => {
+export const handler: RequestHandler = async (req, res) => {
     const imgbuffer = await generateImage("Role playing game landscape, desert arid landscape barren.");
     res.writeHead(200, {
         "Content-Type": "image/png",
         "Content-Length": imgbuffer.length,
     });
     res.end(imgbuffer);
-});
-
-app.listen(8080, () => console.log("listening!"));
+}
