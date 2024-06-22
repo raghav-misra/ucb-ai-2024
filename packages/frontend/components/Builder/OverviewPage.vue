@@ -2,6 +2,8 @@
 const emit = defineEmits<{
     (e: "next"): void;
 }>();
+
+const builderState = useBuilderState();
 </script>
 
 <template>
@@ -9,16 +11,16 @@ const emit = defineEmits<{
         <template v-slot:content>
             <div class="my-3">
                 <h5>Game name</h5>
-                <input type="text" class="form-control" placeholder="twizz bizz, the return of yeat">
+                <input type="text" class="form-control" v-model="builderState.name" placeholder="twizz bizz, the return of yeat">
             </div>
             <div class="my-3" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                 <div>
                     <h5>Game description</h5>
-                    <textarea class="form-control" placeholder="twizz bizz tonka chonka."></textarea>
+                    <textarea class="form-control" v-model="builderState.description" placeholder="twizz bizz tonka chonka."></textarea>
                 </div>   
                 <div>
                     <h5>Theme keywords</h5>
-                    <textarea class="form-control" placeholder="ex. fantasy, spooky, etc"></textarea>
+                    <textarea class="form-control" v-model="builderState.theme" placeholder="ex. fantasy, spooky, etc"></textarea>
                 </div>                
             </div>
         </template>
