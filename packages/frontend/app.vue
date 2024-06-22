@@ -1,11 +1,6 @@
 <template>
     <main>
-        <header class="bg-black p-3 d-flex">
-            <h1 class="h3 text-white">TwizzApp</h1>
-            <div class="ms-auto">
-                <input type="text" class="form-control" placeholder="Search games...">
-            </div>
-        </header>
+        <AppHeader />
         <NuxtPage />
     </main>
 </template>
