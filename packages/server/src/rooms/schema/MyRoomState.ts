@@ -27,19 +27,10 @@ export class Scene extends Schema {
     @type("string") sceneType: string; 
     @type([Message]) messages = new ArraySchema<Message>();
 }
-
-// class Conversation extends Schema {
-//     @type("string") receiverId: string; // the id who selfId (below) is talking to
-//     @type(["string"]) messages = new ArraySchema<string>();
-// }
-
-// class Battle extends Schema {
-//     @type("string") receiverId: string; // the id who selfId (below) is talking to
-// }
     
 export class MyRoomState extends Schema {
     @type({ map: "string" }) sessionUserIdMap = new MapSchema<string>();
-    @type("string") currentPlayerId: string; // the id of whoever's turn it is
+    @type("string") currentUserId: string; // the id of whoever's turn it is
     @type([Character]) characters = new ArraySchema<Character>(); // info on all characters
     @type([Scene]) scenes = new ArraySchema<Scene>();
 }

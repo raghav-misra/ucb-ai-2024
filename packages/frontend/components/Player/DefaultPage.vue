@@ -1,21 +1,5 @@
 <script setup lang="ts">
-const prompt = ref("");
-
-const wsClient = useWSClient();
-const gameRoomState = useGameRoomState();
-
-function sendPrompt(evt: KeyboardEvent) {
-    if (evt.shiftKey) return;
-
-    evt.preventDefault(); 
-
-    if (prompt.value === "") return; // no empty
-
-    wsClient.value.room?.send("NEW_MESSAGE", prompt.value);
-    prompt.value = "";
-
-    return false;
-}
+const { prompt, sendPrompt } = usePrompt();
 </script>
 
 <template>
