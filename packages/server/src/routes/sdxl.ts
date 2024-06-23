@@ -1,5 +1,5 @@
 import { BedrockRuntimeClient, InvokeModelCommand } from "@aws-sdk/client-bedrock-runtime";
-import express, { type RequestHandler } from "express";
+import { type RequestHandler } from "express";
 
 const client = new BedrockRuntimeClient({
     credentials: {
