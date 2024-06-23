@@ -15,7 +15,7 @@ const wsClient = useWSClient();
 const gameRoomState = useGameRoomState();
 const userId = useUserId();
 
-onMounted(async () => {
+onBeforeMount(async () => {
     //@ts-ignore
     window._wsClient = wsClient.value; 
 
@@ -58,7 +58,9 @@ onMounted(async () => {
     <section class="region d-flex align-items-center justify-content-center">
         <PlayerDefaultPage v-if="view.is('default')" />
         <PlayerBattlePage v-if="view.is('battle')" />
+
         <PlayerDialogBox />
+        <PlayerStatsCard />
     </section>
 </template>
 
