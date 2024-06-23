@@ -4,6 +4,7 @@ import { playground } from "@colyseus/playground";
 
 import { handler as sdxlHandler } from "./routes/sdxl";
 import { handler as authHandler } from "./routes/auth";
+import { handler as configsHandler } from "./routes/configs";
 
 import express from "express";
 
@@ -31,6 +32,7 @@ export default config({
          */
         app.get("/sdxl", sdxlHandler);
         app.post("/auth", authHandler);
+        app.post("/configs", configsHandler);
 
         /**
          * Use @colyseus/playground

@@ -1,11 +1,32 @@
 <script setup lang="ts">
+import Swal from 'sweetalert2';
+
 const emit = defineEmits<{
     (e: "next"): void;
 }>();
 
 const builderState = useBuilderState();
+const user = useUser();
 
-const display = () => console.log(builderState.value);
+const display = async () => {
+    const copy = JSON.parse(JSON.stringify(builderState.value)) as IBuilderState;
+    const res = await fetch("http://localhost:2567/configs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+            userId: user.value.userId, 
+            config: copy 
+        })
+    });
+    const { success } = await res.json();
+    if (success) {
+        user.value.gameConfigs.push(copy);
+        navigateTo("/dashboard");
+        Swal.fire("Successfully uploaded game!", "It's ready to play!", "success");
+    } else {
+        Swal.fire("Unexpected error in upload.", "Sorry about the inconvenience", "error");
+    }
+};
 
 const addEvent = () => {
     builderState.value.events.push({
