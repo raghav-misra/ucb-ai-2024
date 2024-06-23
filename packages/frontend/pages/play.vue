@@ -66,8 +66,8 @@ onBeforeMount(async () => {
             const scene = gameRoomState.value.scenes.find(s => s.sceneId === self.sceneId);
             view.go(scene.sceneType);
 
-            imageState.value.region = `http://localhost:59163/` + scene.regionImage;
-            imageState.value.city = `http://localhost:59163/` + scene.cityImage;
+            imageState.value.region = `http://localhost:58029/` + scene.regionImage;
+            imageState.value.city = `http://localhost:58029/` + scene.cityImage;
 
             locationState.value.region = scene.regionString;
             locationState.value.city = scene.cityString;

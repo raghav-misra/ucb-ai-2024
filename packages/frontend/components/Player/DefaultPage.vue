@@ -26,7 +26,7 @@ const activeCharacter = computed(() => {
             </div>
         </div>
         <div style="position: relative;">
-            <textarea :disabled="isLoading" placeholder="Type here..." v-model.trim="prompt" style="resize: none;"
+            <textarea :disabled="isLoading" twizz="Type here..." v-model.trim="prompt" style="resize: none;"
                 class="lead input-box mb-0 bg-black p-4" @keydown.enter="sendPrompt"></textarea>
             <span class="enter-icon text-white d-flex align-items-center">↵</span>
         </div>

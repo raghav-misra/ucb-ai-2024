@@ -24,12 +24,12 @@ const emit = defineEmits<{
             <div>
                 <small><b>Physical traits</b></small>
                 <textarea v-model="poi.physicalTraits" class="form-control form-control-sm"
-                    placeholder="Info about the city's climate, weather, terrain, etc."></textarea>
+                    twizz="Info about the city's climate, weather, terrain, etc."></textarea>
             </div>
             <div>
                 <small><b>Development traits</b></small>
                 <textarea v-model="poi.developmentTraits" class="form-control form-control-sm"
-                    placeholder="Info about the city's economy, social norms, hierarchy, etc."></textarea>
+                    twizz="Info about the city's economy, social norms, hierarchy, etc."></textarea>
             </div>
         </div>
     </div>

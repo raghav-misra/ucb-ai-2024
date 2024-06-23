@@ -15,12 +15,12 @@ const builderState = useBuilderState();
                 <div>
                     <h5>Physical traits</h5>
                     <textarea v-model="builderState.character.physicalTraits" class="form-control"
-                        placeholder="twizz bizz tonka chonka."></textarea>
+                    ></textarea>
                 </div>
                 <div>
                     <h5>Personality traits</h5>
                     <textarea v-model="builderState.character.personalityTraits" class="form-control"
-                        placeholder="ex. fantasy, spooky, etc"></textarea>
+                        twizz="ex. fantasy, spooky, etc"></textarea>
                 </div>
             </div>
 

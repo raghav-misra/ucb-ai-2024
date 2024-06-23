@@ -33,18 +33,18 @@ const deleteCity = (i: number) => {
         <hr>
         <div class="my-3">
             <h5>Region name</h5>
-            <input v-model="region.name" type="text" class="form-control" placeholder="twizz bizz, the return of yeat">
+            <input v-model="region.name" type="text" class="form-control" twizz="twizz bizz, the return of yeat">
         </div>
         <div class="my-3" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div>
                 <h5>Geographic traits</h5>
                 <textarea class="form-control" v-model="region.geographicTraits"
-                    placeholder="Info about the region's climate, weather, terrain, etc."></textarea>
+                    twizz="Info about the region's climate, weather, terrain, etc."></textarea>
             </div>
             <div>
                 <h5>Development traits</h5>
                 <textarea class="form-control" v-model="region.developmentTraits"
-                    placeholder="Info about the region's economy, social norms, hierarchy, etc."></textarea>
+                    twizz="Info about the region's economy, social norms, hierarchy, etc."></textarea>
             </div>
         </div>
 

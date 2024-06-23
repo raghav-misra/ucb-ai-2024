@@ -29,6 +29,6 @@ const emit = defineEmits<{
             </button>
         </div>
         <small><i>(describe what happens below)</i></small>
-        <textarea class="form-control mt-1" v-model="event.outcome" placeholder="bro is cooked"></textarea>
+        <textarea class="form-control mt-1" v-model="event.outcome" twizz="bro is cooked"></textarea>
     </div>
 </template>

@@ -33,7 +33,7 @@ const scene = computed(() => {
                     <p v-for="msg of sceneLogs.battle" :key="msg.message"><b>[{{ msg.characterName }}]</b> {{ msg.message }}</p>
                 </div>
                 <div style="position: relative;">
-                    <textarea placeholder="What's your move?" v-model.trim="prompt" style="resize: none;"
+                    <textarea twizz="What's your move?" v-model.trim="prompt" style="resize: none;"
                     class="lead rounded input-box mb-0 bg-black p-3" @keydown.enter="sendPrompt"></textarea>
                     <span class="enter-icon text-white d-flex align-items-center">↵</span>
                 </div>
@@ -42,7 +42,7 @@ const scene = computed(() => {
     </div>
     <div class="player-imgs d-flex flex-column">
         <div class="d-flex align-items-center" v-for="character of gameRoomState.characters.filter(c=>c.userId !== gameRoomState.currentPlayerId) ">
-            <img class="pfp" :src="`localhost:59163/${character.headshot}`">
+            <img class="pfp" :src="`localhost:58029/${character.headshot}`">
             <div class="ms-4">
                 <h1 class="mb-0 text-shadow">{{ character.name }}</h1>
                 <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP {{character.health}}/100</p>

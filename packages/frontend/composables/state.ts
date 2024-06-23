@@ -66,74 +66,93 @@ function getInitialBuilderState() {
 
         "regions": [
             {
-                "name": "Enchanted Forest",
-                "geographicTraits": "A mystical forest with towering ancient trees, magical flora, and sparkling streams. The forest is shrouded in a perpetual twilight with glowing bioluminescent plants.",
-                "developmentTraits": "Protected by ancient magic, very few humans have ventured into its depths. A small community of elves and mystical creatures inhabit this forest.",
+                "name": "Mountainous Highlands",
+                "geographicTraits": "A rugged region with towering mountains, deep valleys, and clear, cold rivers. The area is characterized by its steep cliffs and rocky terrain.",
+                "developmentTraits": "Sparse population with small, isolated communities. The harsh environment limits large-scale development, but the region is rich in natural resources.",
                 "cities": [
                     {
-                        "name": "Eldertree Village",
-                        "geographicTraits": "Nestled among the oldest and tallest trees, with homes built into the trunks and canopy. The village is surrounded by lush greenery and vibrant flowers.",
-                        "developmentTraits": "The village thrives on a symbiotic relationship with the forest. The inhabitants practice ancient magic and are skilled in herbal medicine.",
-                        "connectedCities": ["Moonshadow Hamlet"],
+                        "name": "Highland Village",
+                        "geographicTraits": "Located in a sheltered valley surrounded by high peaks. The village is built on terraces carved into the mountainside.",
+                        "developmentTraits": "The community relies on traditional agriculture and livestock farming. The village is known for its strong sense of community and self-sufficiency.",
+                        "connectedCities": ["Riverside Town"],
                         "pois": [
                             {
-                                "name": "Ancient Grove",
-                                "physicalTraits": "A sacred grove with towering, centuries-old trees arranged in a perfect circle. The air is thick with magical energy.",
-                                "developmentTraits": "Used for rituals and gatherings, it is a place of deep reverence and power for the inhabitants."
+                                "name": "Old Fort",
+                                "physicalTraits": "An ancient stone fort perched on a cliff, overlooking the valley below. The fort is partially in ruins but still stands as a testament to the region's history.",
+                                "developmentTraits": "A historical site and tourist attraction, offering guided tours and historical reenactments."
                             },
                             {
-                                "name": "Crystal Springs",
-                                "physicalTraits": "A series of clear, sparkling springs that emit a soft, ethereal glow. The water is said to have healing properties.",
-                                "developmentTraits": "A place for healing and meditation, frequented by both the village inhabitants and travelers seeking solace."
+                                "name": "Mountain Lake",
+                                "physicalTraits": "A pristine, crystal-clear lake fed by mountain springs. The lake is surrounded by pine forests and wildflowers.",
+                                "developmentTraits": "A popular spot for fishing, hiking, and picnicking. The lake is also a source of fresh water for the village."
                             }
                         ]
                     },
                     {
-                        "name": "Moonshadow Hamlet",
-                        "geographicTraits": "Located at the edge of the forest where the trees thin out, revealing a breathtaking view of the moonlit sky.",
-                        "developmentTraits": "A community of stargazers and astronomers who study the celestial bodies. The hamlet is known for its observatory and star maps.",
-                        "connectedCities": ["Eldertree Village"],
+                        "name": "Riverside Town",
+                        "geographicTraits": "Situated along a wide, fast-flowing river. The town is built on both sides of the river, connected by a historic stone bridge.",
+                        "developmentTraits": "A bustling market town with a diverse economy based on trade, agriculture, and tourism. The town is a regional hub for commerce and transportation.",
+                        "connectedCities": ["Highland Village"],
                         "pois": [
                             {
-                                "name": "Silver Observatory",
-                                "physicalTraits": "A grand observatory made of silver and glass, perched on a hill. It has a large telescope that reaches towards the stars.",
-                                "developmentTraits": "A center of learning and discovery, attracting scholars from far and wide to study the night sky."
+                                "name": "Stone Bridge",
+                                "physicalTraits": "A centuries-old bridge made of stone, with arches spanning the river. The bridge is a key landmark and vital crossing point.",
+                                "developmentTraits": "A symbol of the town's heritage, the bridge is well-maintained and often photographed by visitors."
                             },
                             {
-                                "name": "Lunar Temple",
-                                "physicalTraits": "A beautiful temple made of white marble that glows under the moonlight. Surrounded by moonflowers that only bloom at night.",
-                                "developmentTraits": "A place of worship and reflection dedicated to the moon goddess. Pilgrims come here to seek guidance and blessings."
+                                "name": "Market Square",
+                                "physicalTraits": "A large, open square in the center of town, surrounded by shops and cafes. The square hosts a weekly market that draws vendors and buyers from across the region.",
+                                "developmentTraits": "The economic heart of the town, the market is known for its fresh produce, handmade goods, and vibrant atmosphere."
                             }
                         ]
                     }
                 ]
             },
             {
-                "name": "Desert of Echoes",
-                "geographicTraits": "A vast desert with rolling sand dunes, rocky outcrops, and ancient ruins. The desert is known for its eerie silence, broken only by the whispers of the wind.",
-                "developmentTraits": "Sparse human activity, with only a few nomadic tribes who have adapted to the harsh environment. The desert holds many secrets and hidden treasures.",
+                "name": "Coastal Plains",
+                "geographicTraits": "A flat, expansive region with fertile soil, dotted with farms and small towns. The coastline features sandy beaches and rocky outcrops.",
+                "developmentTraits": "Heavily agricultural, with large-scale farming operations. The region also has a growing tourism industry due to its scenic coastlines and pleasant climate.",
                 "cities": [
                     {
-                        "name": "Oasis City",
-                        "geographicTraits": "Built around a large, lush oasis with palm trees and abundant water. The city is a bustling hub of trade and culture.",
-                        "developmentTraits": "A melting pot of different cultures and peoples, the city thrives on commerce and trade. It is a beacon of life in the harsh desert.",
-                        "connectedCities": [],
+                        "name": "Seaside City",
+                        "geographicTraits": "A bustling port city located at the mouth of a major river. The city has a mix of modern buildings and historic architecture.",
+                        "developmentTraits": "A major commercial and cultural center, the city is known for its seafood, maritime industry, and vibrant arts scene.",
+                        "connectedCities": ["Harbor Town"],
                         "pois": [
                             {
-                                "name": "Sunset Bazaar",
-                                "physicalTraits": "A vibrant marketplace filled with colorful tents and stalls. The air is filled with the scents of exotic spices and the sounds of haggling merchants.",
-                                "developmentTraits": "A major trading hub where merchants from across the region come to sell their goods. It is the lifeblood of the city."
+                                "name": "Harbor",
+                                "physicalTraits": "A large, busy harbor filled with ships and boats. The harbor is equipped with modern facilities for loading and unloading cargo.",
+                                "developmentTraits": "The economic lifeline of the city, the harbor handles a significant portion of the region's trade and commerce."
                             },
                             {
-                                "name": "Whispering Dunes",
-                                "physicalTraits": "A vast expanse of sand dunes that seem to move and shift with the wind. The dunes are said to hold the voices of ancient spirits.",
-                                "developmentTraits": "Considered a sacred place by the nomads, who come here to seek wisdom and guidance from the spirits of the desert."
+                                "name": "Old Lighthouse",
+                                "physicalTraits": "A historic lighthouse situated on a rocky promontory overlooking the sea. The lighthouse is still operational and offers panoramic views.",
+                                "developmentTraits": "A popular tourist attraction, the lighthouse is also a vital navigational aid for ships entering the harbor."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Harbor Town",
+                        "geographicTraits": "A smaller town located along the coast, known for its picturesque beaches and charming seaside atmosphere.",
+                        "developmentTraits": "The town has a mix of fishing and tourism-based economy, with numerous beachfront hotels and restaurants.",
+                        "connectedCities": ["Seaside City"],
+                        "pois": [
+                            {
+                                "name": "Fisherman's Wharf",
+                                "physicalTraits": "A bustling wharf with fishing boats, seafood markets, and docks. The wharf is the heart of the town's fishing industry.",
+                                "developmentTraits": "A lively area where visitors can buy fresh seafood, watch fishermen at work, and enjoy waterfront dining."
+                            },
+                            {
+                                "name": "Sandy Beach",
+                                "physicalTraits": "A long stretch of sandy beach with gentle waves and clear blue water. The beach is lined with palm trees and beach huts.",
+                                "developmentTraits": "A major attraction for tourists, offering activities like swimming, sunbathing, and beach volleyball."
                             }
                         ]
                     }
                 ]
             }
         ],
+
         character: {
             physicalTraits: "",
             personalityTraits: "",

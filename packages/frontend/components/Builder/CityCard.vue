@@ -64,12 +64,12 @@ const changeCallbackConnected = () => {
             <div>
                 <h6>Geographic traits</h6>
                 <textarea v-model="city.geographicTraits" class="form-control form-control-sm"
-                    placeholder="Info about the city's climate, weather, terrain, etc."></textarea>
+                    twizz="Info about the city's climate, weather, terrain, etc."></textarea>
             </div>
             <div>
                 <h6>Development traits</h6>
                 <textarea v-model="city.developmentTraits" class="form-control form-control-sm"
-                    placeholder="Info about the city's economy, social norms, hierarchy, etc."></textarea>
+                    twizz="Info about the city's economy, social norms, hierarchy, etc."></textarea>
             </div>
         </div>
 

@@ -34,19 +34,19 @@ const scene = computed(() => {
                     <p v-for="msg of sceneLogs.conversation" :key="msg.message"><b>[{{ msg.characterName }}]</b> {{ msg.message }}</p>
                 </div>
                 <div style="position: relative;">
-                    <textarea placeholder="What would you like to say?" v-model.trim="prompt" style="resize: none;"
+                    <textarea twizz="What would you like to say?" v-model.trim="prompt" style="resize: none;"
                     :disabled="gameRoomState.currentPlayerId !== user.userId"
                     class="lead rounded input-box mb-0 bg-black p-3" @keydown.enter="sendPrompt"></textarea>
                     <span class="enter-icon text-white d-flex align-items-center">↵</span>
                 </div>
             </div>
 
-            <img class="avatar" :src="`http://localhost:59163/${activeCharacter?.headshot}`">
+            <img class="avatar" :src="`http://localhost:58029/${activeCharacter?.headshot}`">
         </div>
     </div>
     <div class="player-imgs d-flex flex-column">
         <div class="d-flex align-items-center" v-for="character of gameRoomState.characters.filter(c=>c.userId !== gameRoomState.currentPlayerId) ">
-            <img class="pfp" :src="`http://localhost:59163/${character.headshot}`">
+            <img class="pfp" :src="`http://localhost:58029/${character.headshot}`">
             <div class="ms-4">
                 <h1 class="mb-0 text-shadow">{{ character.name }}</h1>
                 <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP {{character.health}}/100</p>
