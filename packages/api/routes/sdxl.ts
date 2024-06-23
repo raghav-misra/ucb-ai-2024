@@ -10,7 +10,7 @@ const client = new BedrockRuntimeClient({
     region: "us-west-2"
 });
 
-async function generateImage(prompt: string) {
+async function generateImage(prompt: string, size: "bg" | "normal") {
     const input = {
         "modelId": "stability.stable-diffusion-xl-v1",
         "contentType": "application/json",
@@ -25,8 +25,8 @@ async function generateImage(prompt: string) {
             cfg_scale: 10,
             seed: 0,
             steps: 50,
-            width: 512,
-            height: 512,
+            width: size === "bg" ? 1024: 512,
+            height: size === "bg" ? 576 : 512,
             style_preset: "fantasy-art"
         })
     };
@@ -40,7 +40,7 @@ async function generateImage(prompt: string) {
 }
 
 export const handler: RequestHandler = async (req, res) => {
-    const imgbuffer = await generateImage("Role playing game landscape, desert arid landscape barren.");
+    const imgbuffer = await generateImage(req.query.prompt as string, (req.query.size as "bg") || "normal");
     res.writeHead(200, {
         "Content-Type": "image/png",
         "Content-Length": imgbuffer.length,
