@@ -11,6 +11,10 @@ const view = {
     }
 };
 
+definePageMeta({
+    middleware: ["auth"]
+});
+
 const wsClient = useWSClient();
 const gameRoomState = useGameRoomState();
 const userId = useUserId();

@@ -12,7 +12,7 @@ const player = computed(() => getCharacterFromId(userId.value));
 <template>
     <div class="relaxed-box bg-black rounded" style="overflow: hidden;">
         <div class="city d-flex justify-content-center align-items-center">
-            <div class="bg-black py-2 px-3 rounded shadow-lg" style="opacity: 0.75;">
+            <div class="bg-black py-2 px-3 rounded shadow-lg" style="opacity: 0.8;">
                 <p class="mb-0 lead">
                     {{ player?.city }}, {{ player?.region  }} 📍
                 </p>

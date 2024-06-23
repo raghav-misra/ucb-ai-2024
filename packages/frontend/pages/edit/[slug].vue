@@ -9,6 +9,10 @@ const view = {
     }
 };
 
+definePageMeta({
+    middleware: ["auth"]
+});
+
 const builderState = useBuilderState();
 </script>
 
@@ -16,7 +20,7 @@ const builderState = useBuilderState();
     <div class="page align-items-stretch" style="display: grid; grid-template-columns: 1fr 4fr;">
         <div class="sidebar bg-light p-4 text-end d-flex flex-column">
             <div class="pe-3">
-                <h2 class="lead">TwizzApp Builder</h2>
+                <h2 class="lead">GameForge AI Builder</h2>
                 <small><i>"{{  builderState.name  }}"</i></small>
                 <hr>
             </div>
@@ -25,7 +29,14 @@ const builderState = useBuilderState();
                 <button class="text-end btn btn-light" @click="view.go('locations')">Map and locations</button>
                 <button class="text-end btn btn-light" @click="view.go('attributes')">Character attributes</button>
                 <button class="text-end btn btn-light" @click="view.go('outcomes')">Game events</button>
-                <button class="text-end btn btn-outline-dark">Back to dashboard</button>
+            </nav>
+            
+            <div class="pe-3">
+                <hr>
+            </div>
+
+            <nav class="d-flex flex-column flex-grow-1 align-items-stretch">    
+                <button class="text-end btn btn-light">Back to dashboard</button>
             </nav>
         </div>
         <div class="content flex-grow-1 p-4">

@@ -15,19 +15,19 @@ const player = computed(() => getCharacterFromId(userId.value));
         <div class="bg-black py-2 px-3 rounded shadow-lg">
             <p class="mb-0 lead">
                 <span class="text-end">{{ player?.health }}</span>
-                <span style="font-weight: bold !important;"> health ❤️</span>
+                <span style="font-weight: bold !important;"> Health ❤️</span>
             </p>
         </div>
         <div class="bg-black py-2 px-3 rounded shadow-lg ms-3">
             <p class="mb-0 lead">
                 <span class="text-end">{{ player?.strength }}</span>
-                <span style="font-weight: bold !important;"> strength ⚡</span>
+                <span style="font-weight: bold !important;"> Strength ⚡</span>
             </p>
         </div>
         <div class="bg-black py-2 px-3 rounded shadow-lg ms-3">
             <p class="mb-0 lead">
                 <span class="text-end">{{ player?.currency }}</span>
-                <span style="font-weight: bold !important;"> currency 💸</span>
+                <span style="font-weight: bold !important;"> Currency 💸</span>
             </p>
         </div>
     </div>
@@ -36,5 +36,6 @@ const player = computed(() => getCharacterFromId(userId.value));
 <style scoped>
 .stats-card {
     position: absolute;
+    opacity: 0.8;
 }
 </style>

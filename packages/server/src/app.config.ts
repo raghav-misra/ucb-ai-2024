@@ -3,6 +3,9 @@ import { monitor } from "@colyseus/monitor";
 import { playground } from "@colyseus/playground";
 
 import { handler as sdxlHandler } from "./routes/sdxl";
+import { handler as authHandler } from "./routes/auth";
+
+import express from "express";
 
 /**
  * Import your Room files
@@ -20,11 +23,14 @@ export default config({
     },
 
     initializeExpress: (app) => {
+        app.use(express.json());
+
         /**
          * Bind your custom express routes here:
          * Read more: https://expressjs.com/en/starter/basic-routing.html
          */
         app.get("/sdxl", sdxlHandler);
+        app.post("/auth", authHandler);
 
         /**
          * Use @colyseus/playground

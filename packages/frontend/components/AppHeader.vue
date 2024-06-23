@@ -4,9 +4,8 @@ const route = useRoute();
 
 <template>
     <header v-if="!route.fullPath.includes('/play')" class="bg-dark p-3 d-flex">
-        <h1 class="h3 mb-0 text-white">TwizzApp</h1>
-        <div class="ms-auto">
-            <input type="text" class="form-control" placeholder="Search games...">
-        </div>
+        <h1 class="h3 mb-0 text-white">GameForge</h1>
+
+        <NuxtLink to="/auth" class="ms-auto btn btn-primary">Signup / Login</NuxtLink>
     </header>
 </template>

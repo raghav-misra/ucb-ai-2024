@@ -53,7 +53,6 @@ const deleteCity = (i: number) => {
             <button class="btn btn-primary btn-sm mb-2" @click="addCity">Add city</button>
             <p v-if="region.cities.length === 0">No cities, add one above.</p>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-
                 <BuilderCityCard v-for="(city, i) of region.cities" :key="i" :city="city" :region="region" @delete="deleteCity(i)" />
             </div>
         </div>
