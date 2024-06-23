@@ -1,10 +1,18 @@
-<template>
-    <div class="dialog-box-container">
-        <div class="dialog-box p-4 bg-black text-center">
-            <h2>THE WORLD 🌎</h2>
-            <h4 class="fst-italic">You failed to examine your glock. You don't even own a glock!</h4>
+<script setup lang="ts">
+const { dialogOptions, hideDialog } = useDialog();
 
-            <button class="btn btn-black btn-lg">[ okay ]</button>
+const emit = defineEmits<{
+    (e: "ok"): void;    
+}>();
+</script>
+
+<template>
+    <div class="dialog-box-container" v-if="dialogOptions.isOpen">
+        <div class="dialog-box p-4 bg-black text-center">
+            <h2>{{ dialogOptions.title }}</h2>
+            <h4 class="fst-italic">{{ dialogOptions.text }}</h4>
+
+            <button class="btn btn-black btn-lg" @click="hideDialog">[ okay ]</button>
         </div>
     </div>
 </template>

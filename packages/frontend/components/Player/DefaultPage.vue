@@ -1,12 +1,17 @@
 <script setup lang="ts">
-const { prompt, sendPrompt } = usePrompt();
+const { showDialog } = useDialog();
+
+const { prompt, sendPrompt } = usePrompt((promptText: string) => {
+    showDialog("THE WORLD...", "Received message: " + promptText);
+});
 </script>
 
 <template>
-    <div class="relaxed-box bg-black">
+    <div class="relaxed-box bg-black rounded" style="overflow: hidden;">
         <div class="city"></div>
         <div style="position: relative;">
-            <textarea placeholder="Type here..." v-model.trim="prompt" style="resize: none;" class="lead input-box mb-0 bg-black p-4" @keydown.enter="sendPrompt"></textarea>
+            <textarea placeholder="Type here..." v-model.trim="prompt" style="resize: none;"
+                class="lead input-box mb-0 bg-black p-4" @keydown.enter="sendPrompt"></textarea>
             <span class="enter-icon text-white d-flex align-items-center">↵</span>
         </div>
     </div>

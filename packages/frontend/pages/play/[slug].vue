@@ -2,7 +2,7 @@
 import * as Colyseus from "colyseus.js";
 
 const view = {
-    curr: ref('battle'),
+    curr: ref('default'),
     go(loc: string) {
         this.curr.value = loc;
     },
@@ -58,6 +58,7 @@ onMounted(async () => {
     <section class="region d-flex align-items-center justify-content-center">
         <PlayerDefaultPage v-if="view.is('default')" />
         <PlayerBattlePage v-if="view.is('battle')" />
+        <PlayerDialogBox />
     </section>
 </template>
 
