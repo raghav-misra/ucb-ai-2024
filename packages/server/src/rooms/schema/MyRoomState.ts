@@ -16,6 +16,9 @@ export class Character extends Schema {
     @type("number") energy: number;
 
     @type("string") sceneId: string; // reference to the scene they're in.
+
+    @type("string") city: string;
+    @type("string") region: string;
 }
 
 export class Message extends Schema {

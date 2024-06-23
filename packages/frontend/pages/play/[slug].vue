@@ -35,6 +35,7 @@ onBeforeMount(async () => {
     wsClient.value.room.send("NEW_CHARACTER", {
         userId: userId.value,
         name: "twizz",
+
         currency: 0,
         health: 100,
         strength: 0,
@@ -44,7 +45,11 @@ onBeforeMount(async () => {
         wisdom: 0,
         dexterity: 0,
         charisma: 0,
-        sceneId: "20"
+
+        sceneId: "20",
+
+        city: "Pleasanton",
+        region: "California"
     } as IGameCharacter);
 
     wsClient.value.room.send("NEW_SCENE", {

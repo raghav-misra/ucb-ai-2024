@@ -96,6 +96,7 @@ export const useWSClient = () => useState<{
 export interface IGameCharacter {
     name: string;
     userId: string;
+
     currency: number;
     health: number;
     strength: number;
@@ -105,7 +106,11 @@ export interface IGameCharacter {
     wisdom: number;
     dexterity: number;
     charisma: number;
+
     sceneId: string;
+
+    city: string;
+    region: string;
 }
 
 export interface IGameScene {

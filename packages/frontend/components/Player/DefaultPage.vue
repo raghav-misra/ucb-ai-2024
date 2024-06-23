@@ -4,11 +4,20 @@ const { showDialog } = useDialog();
 const { prompt, sendPrompt } = usePrompt((promptText: string) => {
     showDialog("THE WORLD...", "Received message: " + promptText);
 });
+
+const userId = useUserId();
+const player = computed(() => getCharacterFromId(userId.value));
 </script>
 
 <template>
     <div class="relaxed-box bg-black rounded" style="overflow: hidden;">
-        <div class="city"></div>
+        <div class="city d-flex justify-content-center align-items-center">
+            <div class="bg-black py-2 px-3 rounded shadow-lg" style="opacity: 0.75;">
+                <p class="mb-0 lead">
+                    {{ player?.city }}, {{ player?.region  }} 📍
+                </p>
+            </div>
+        </div>
         <div style="position: relative;">
             <textarea placeholder="Type here..." v-model.trim="prompt" style="resize: none;"
                 class="lead input-box mb-0 bg-black p-4" @keydown.enter="sendPrompt"></textarea>
