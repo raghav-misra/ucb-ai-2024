@@ -90,3 +90,36 @@ export const useWSClient = () => useState<{
     client: null,
     room: null,
 }));
+
+export interface IGameCharacter {
+    name: string;
+    userId: string;
+    currency: number;
+    health: number;
+    strength: number;
+    constitution: number;
+    intelligence: number;
+    wisdom: number;
+    dexterity: number;
+    charisma: number;
+    sceneId: string;
+}
+
+export interface IGameScene {
+    sceneId: string;
+    sceneType: "default" | "conversation" | "battle";
+    messages: {
+        userId: number;
+        message: string;
+    }[];
+}
+
+export interface IGameRoomState {   
+    currentPlayerId: string;
+    characters: IGameCharacter[];
+}
+
+export const useGameRoomState = () => useState<IGameRoomState>("gameState", () => ({
+    currentPlayerId: "",
+    characters: [],
+}));

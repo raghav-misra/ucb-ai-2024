@@ -1,45 +1,61 @@
 <script setup lang="ts">
 import * as Colyseus from "colyseus.js";
 
+const view = {
+    curr: ref('default'),
+    go(loc: string) {
+        this.curr.value = loc;
+    },
+    is(loc: string) {
+        return this.curr.value === loc;
+    }
+};
+
 const wsClient = useWSClient();
+const gameRoomState = useGameRoomState();
 
 onMounted(async () => {
+    //@ts-ignore
+    window._wsClient = wsClient.value; 
+
     wsClient.value.client = new Colyseus.Client("ws://localhost:2567");
     try {
         wsClient.value.room = await wsClient.value.client.create("my_room");
-
-        //@ts-ignore
-        window._wsClient = wsClient.value;
     } catch (ex) {
         console.error("Couldn't connect to room:", ex);
+        return;
     }
+
+    wsClient.value.room.onStateChange((state: IGameRoomState) => {
+        gameRoomState.value = JSON.parse(JSON.stringify(state));
+        console.log("state changed!");
+    });
+
+    wsClient.value.room.send("NEW_CHARACTER", {
+        userId: "69",
+        name: "twizz",
+        currency: 0,
+        health: 100,
+        strength: 0,
+        constitution: 0,
+        intelligence: 0,
+        wisdom: 0,
+        dexterity: 0,
+        charisma: 0,
+        sceneId: "20"
+    } as IGameCharacter);
+
+    wsClient.value.room.send("NEW_SCENE", {
+        sceneId: "20",
+        sceneType: "default",
+        messages: [],
+    } as IGameScene);
 });
-
-const prompt = ref("");
-
-function sendPrompt(evt: KeyboardEvent) {
-    if (evt.shiftKey) return;
-
-    evt.preventDefault(); 
-
-    if (prompt.value === "") return; // no empty
-
-    wsClient.value.room?.send("prompt", prompt.value);
-    prompt.value = "";
-
-    return false;
-}
 </script>
 
 <template>
     <section class="region d-flex align-items-center justify-content-center">
-        <div class="relaxed-box bg-black">
-            <div class="city"></div>
-            <div style="position: relative;">
-                <textarea placeholder="Type here..." v-model.trim="prompt" style="resize: none;" class="lead input-box mb-0 bg-black p-4" @keydown.enter="sendPrompt"></textarea>
-                <span class="enter-icon text-white d-flex align-items-center">↵</span>
-            </div>
-        </div>
+        <PlayerDefaultPage v-if="view.is('default')" />
 
         <!-- <PlayerDialogBox /> -->
     </section>
@@ -60,39 +76,5 @@ function sendPrompt(evt: KeyboardEvent) {
     background-position: center center;
     background-size: cover;
     position: relative;
-}
-
-.relaxed-box {
-    width: 25rem;
-    box-shadow: -0.5rem -0.5rem 2rem black, 0.5rem 0.5rem 2rem black;
-    display: flex;
-    flex-direction: column;
-}
-
-.input-box {
-    border: none;
-    outline: none;
-    color: white;
-    width: 100%;
-    padding-right: 3rem !important;
-    height: 5rem;
-    line-height: 1.25rem;
-}
-
-.enter-icon {
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    right: 1rem;
-    pointer-events: none;
-    font-size: 2rem;
-}
-
-.city {
-    width: 25rem;
-    height: 25rem;
-    background-image: url(~/assets/city.png);
-    background-position: center center;
-    background-size: cover;
 }
 </style>
