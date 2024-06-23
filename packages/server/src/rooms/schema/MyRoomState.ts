@@ -13,6 +13,7 @@ export class Character extends Schema {
     @type("number") wisdom: number;
     @type("number") dexterity: number;
     @type("number") charisma: number;
+    @type("number") energy: number;
 
     @type("string") sceneId: string; // reference to the scene they're in.
 }

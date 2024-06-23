@@ -18,31 +18,7 @@ const scene = computed(() => {
 </script>
 
 <template>
-    <div class="player-imgs d-flex flex-column align-items-end">
-        <div class="d-flex align-items-center">
-            <div class="me-4 text-end">
-                <h1 class="mb-0 text-shadow">YEAT</h1>
-                <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP 18/20</p>
-            </div>
-            <img class="pfp" src="~/assets/yeat.jpg">
-        </div>
-        <div class="d-flex align-items-center">
-            <div class="me-4 text-end">
-                <h1 class="mb-0 text-shadow">SEPTEMBERSRICH</h1>
-                <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP 18/20</p>
-            </div>
-            <img class="pfp" src="~/assets/yeat.jpg">
-        </div>
-        <div class="d-flex align-items-center">
-            <div class="me-4 text-end">
-                <h1 class="mb-0 text-shadow">KANKAN</h1>
-                <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP 18/20</p>
-            </div>
-            <img class="pfp" src="~/assets/yeat.jpg">
-        </div>
-    </div>
-
-    <div class="battle ms-4 ps-4 d-flex flex-column align-items-stretch">
+    <div class="battle me-4 pe-4 d-flex flex-column align-items-stretch">
         <div class="bg-black text-center p-4 rounded shadow-lg">
             <h3 class="text-danger mb-0">BATTLE</h3>
             <h1 class="mb-0">It's Yeat's turn.</h1>
@@ -59,6 +35,29 @@ const scene = computed(() => {
                     class="lead rounded input-box mb-0 bg-black p-3" @keydown.enter="sendPrompt"></textarea>
                     <span class="enter-icon text-white d-flex align-items-center">↵</span>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="player-imgs d-flex flex-column">
+        <div class="d-flex align-items-center">
+            <img class="pfp" src="~/assets/yeat.jpg">
+            <div class="ms-4">
+                <h1 class="mb-0 text-shadow">YEAT</h1>
+                <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP 18/20</p>
+            </div>
+        </div>
+        <div class="d-flex align-items-center">
+            <img class="pfp" src="~/assets/yeat.jpg">
+            <div class="ms-4">
+                <h1 class="mb-0 text-shadow">SEPTEMBERSRICH</h1>
+                <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP 18/20</p>
+            </div>
+        </div>
+        <div class="d-flex align-items-center">
+            <img class="pfp" src="~/assets/yeat.jpg">
+            <div class="ms-4">
+                <h1 class="mb-0 text-shadow">KANKAN</h1>
+                <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP 18/20</p>
             </div>
         </div>
     </div>

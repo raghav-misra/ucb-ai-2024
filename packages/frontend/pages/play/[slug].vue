@@ -2,7 +2,7 @@
 import * as Colyseus from "colyseus.js";
 
 const view = {
-    curr: ref('default'),
+    curr: ref('battle'),
     go(loc: string) {
         this.curr.value = loc;
     },
@@ -40,6 +40,7 @@ onBeforeMount(async () => {
         strength: 0,
         constitution: 0,
         intelligence: 0,
+        energy: 0,
         wisdom: 0,
         dexterity: 0,
         charisma: 0,

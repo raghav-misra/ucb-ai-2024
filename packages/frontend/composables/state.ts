@@ -29,6 +29,7 @@ export interface ICharacter {
     initialStrength: number;
     initialConstitution: number;
     initialIntelligence: number;
+    initialEnergy: number;
     initialWisdom: number;
     initialDexterity: number;
     initialCharisma: number;
@@ -69,6 +70,7 @@ function getInitialBuilderState() {
             initialCurrency: 8,
             initialHealth: 20,
             initialStrength: 8,
+            initialEnergy: 8,
             initialConstitution: 8,
             initialDexterity: 8,
             initialIntelligence: 8,
@@ -97,6 +99,7 @@ export interface IGameCharacter {
     currency: number;
     health: number;
     strength: number;
+    energy: number;
     constitution: number;
     intelligence: number;
     wisdom: number;
@@ -109,7 +112,7 @@ export interface IGameScene {
     sceneId: string;
     sceneType: "default" | "conversation" | "battle";
     messages: {
-        userId: number;
+        userId: string;
         message: string;
     }[];
 }
