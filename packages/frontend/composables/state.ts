@@ -128,7 +128,13 @@ export interface IGameRoomState {
     scenes: IGameScene[],
 }
 
-export const useUserId = () => useState<string | null>("userId", () => null);
+export const useUser = () => useState<{
+    userId: string;
+    gameConfigs: IBuilderState[];
+}>("user", () => ({
+    userId: "",
+    gameConfigs: []
+}));
 
 export const useGameRoomState = () => useState<IGameRoomState>("gameState", () => ({
     currentPlayerId: "",

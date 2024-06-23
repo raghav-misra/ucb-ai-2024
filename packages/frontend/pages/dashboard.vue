@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const user = useUser();
+
 definePageMeta({
     middleware: ["auth"]
 });
@@ -11,10 +13,9 @@ definePageMeta({
             <div class="text-center mb-4">
                 <NuxtLink to="/edit/new" class="btn btn-primary">Create a new game</NuxtLink>
             </div>
+            <p class="lead text-center" v-if="user.gameConfigs.length === 0">No games, build one by clicking above!</p>
             <div class="games-grid">
-                <GameCard />
-                <GameCard />
-                <GameCard />
+                <GameCard v-for="config of user.gameConfigs" :builder-state="config" />
             </div>
         </section>
     </div>

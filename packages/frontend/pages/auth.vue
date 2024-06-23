@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const email = ref("");
 const password = ref("");
-const userId = useUserId();
+const user = useUser();
 
 async function submitForm() {
     try {
@@ -19,7 +19,7 @@ async function submitForm() {
         const data = await res.json();
 
         if (data.success) {
-            userId.value = data.userId;
+            user.value = data.payload;
             navigateTo("/dashboard");
         }
     } catch (ex) {

@@ -17,7 +17,7 @@ definePageMeta({
 
 const wsClient = useWSClient();
 const gameRoomState = useGameRoomState();
-const userId = useUserId();
+const user = useUser();
 
 onBeforeMount(async () => {
     //@ts-ignore
@@ -37,7 +37,7 @@ onBeforeMount(async () => {
     });
 
     wsClient.value.room.send("NEW_CHARACTER", {
-        userId: userId.value,
+        userId: user.value.userId,
         name: "twizz",
 
         currency: 0,

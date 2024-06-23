@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { prompt, sendPrompt } = usePrompt();
 
-const userId = useUserId();
+const user = useUser();
 const gameRoomState = useGameRoomState();
 
 function getCharacterFromId(id: string) {
@@ -9,7 +9,7 @@ function getCharacterFromId(id: string) {
 }
 
 const scene = computed(() => {
-    const character = getCharacterFromId(userId.value);
+    const character = getCharacterFromId(user.value.userId);
     const foundScene = gameRoomState.value.scenes.find(s => s.sceneId === character?.sceneId);
     console.log(foundScene);
 

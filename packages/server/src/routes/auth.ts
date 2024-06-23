@@ -5,10 +5,10 @@ export const handler: RequestHandler = (req, res) => {
     const { email, password } = req.body;
     
     try {
-        const userId = users.validate(email, password);
+        const payload = users.validate(email, password);
         res.status(201).json({
             success: true,
-            userId
+            payload
         });
     } catch (ex) {
         res.status(500).json({

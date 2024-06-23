@@ -5,8 +5,8 @@ const { prompt, sendPrompt } = usePrompt((promptText: string) => {
     showDialog("THE WORLD...", "Received message: " + promptText);
 });
 
-const userId = useUserId();
-const player = computed(() => getCharacterFromId(userId.value));
+const user = useUser();
+const player = computed(() => getCharacterFromId(user.value.userId));
 </script>
 
 <template>
