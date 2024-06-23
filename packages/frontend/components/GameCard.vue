@@ -2,6 +2,10 @@
 const props = defineProps<{
     builderState: IBuilderState;
 }>();
+
+const emit = defineEmits<{
+    (e: "play"): void;
+}>();
 </script>
 
 <template>
@@ -18,7 +22,7 @@ const props = defineProps<{
             </h5>
             <p class="card-text">{{ props.builderState.description }}</p>
             <div class="d-flex">
-                <button class="btn btn-primary me-2 flex-grow-1">Play</button>
+                <button class="btn btn-primary me-2 flex-grow-1" @click="emit('play')">Play</button>
                 <button class="btn btn-dark flex-grow-1">Edit</button>
             </div>
         </div>

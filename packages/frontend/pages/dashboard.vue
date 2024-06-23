@@ -1,5 +1,30 @@
 <script setup lang="ts">
+import Swal from "sweetalert2";
+
 const user = useUser();
+const gameInitialState = useGameInitialState();
+
+async function play(config: IBuilderState) {
+    const { value: username } = await Swal.fire({
+        title: "Enter a name to play as:",
+        inputLabel: `The game ${config.name} is almost ready!`,
+        input: "text",
+        inputValidator: value => {
+            if (!value.trim()) {
+                return "A name is required!";
+            }
+        }
+    });
+
+    const name = username?.trim();
+
+    if (name) {
+        gameInitialState.value = {
+            name,
+            config
+        };
+    }
+}
 
 definePageMeta({
     middleware: ["auth"]
@@ -15,7 +40,7 @@ definePageMeta({
             </div>
             <p class="lead text-center" v-if="user.gameConfigs.length === 0">No games, build one by clicking above!</p>
             <div class="games-grid">
-                <GameCard v-for="config of user.gameConfigs" :builder-state="config" />
+                <GameCard v-for="config of user.gameConfigs" :builder-state="config" @play="play(config)" />
             </div>
         </section>
     </div>

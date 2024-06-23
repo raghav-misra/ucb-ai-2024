@@ -136,6 +136,11 @@ export const useUser = () => useState<{
     gameConfigs: []
 }));
 
+export const useGameInitialState = () => useState<{
+    name: string;
+    config: IBuilderState;
+} | null>("gameInitialState", () => null);
+
 export const useGameRoomState = () => useState<IGameRoomState>("gameState", () => ({
     currentPlayerId: "",
     characters: [],

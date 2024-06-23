@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import * as Colyseus from "colyseus.js";
+import Swal from "sweetalert2";
 
 const view = {
     curr: ref('conversation'),
@@ -11,6 +12,8 @@ const view = {
     }
 };
 
+const gameInitialState = useGameInitialState();
+
 definePageMeta({
     middleware: ["auth"]
 });
@@ -20,6 +23,11 @@ const gameRoomState = useGameRoomState();
 const user = useUser();
 
 onBeforeMount(async () => {
+    if (gameInitialState.value === null) {
+        await Swal.fire("Please launch a game from the dashboard.", "Redirecting you there now...", "info");
+        navigateTo("/dashboard");
+    }
+
     //@ts-ignore
     window._wsClient = wsClient.value; 
 
