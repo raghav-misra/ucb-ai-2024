@@ -1,5 +1,20 @@
 <script setup lang="ts">
 const { prompt, sendPrompt } = usePrompt();
+
+const userId = useUserId();
+const gameRoomState = useGameRoomState();
+
+function getCharacterFromId(id: string) {
+    return gameRoomState.value.characters.find(c => c.userId === id);
+}
+
+const scene = computed(() => {
+    const character = getCharacterFromId(userId.value);
+    const foundScene = gameRoomState.value.scenes.find(s => s.sceneId === character?.sceneId);
+    console.log(foundScene);
+
+    return foundScene;
+});
 </script>
 
 <template>
@@ -28,23 +43,16 @@ const { prompt, sendPrompt } = usePrompt();
     </div>
 
     <div class="battle ms-4 ps-4 d-flex flex-column align-items-stretch">
-        <div class="bg-black p-4 rounded shadow-lg">
-            <h1 class="mb-0 text-center">It's Yeat's turn.</h1>
+        <div class="bg-black text-center p-4 rounded shadow-lg">
+            <h3 class="text-danger mb-0">BATTLE</h3>
+            <h1 class="mb-0">It's Yeat's turn.</h1>
         </div>
         <div class="city d-flex align-items-end mt-2 p-4 rounded shadow-lg">
             <img class="avatar" src="~/assets/body.png">
 
             <div class="flex-grow-1 align-self-stretch d-flex flex-column">
-                <div class="flex-grow-1 p-3 bg-dark mb-4 rounded shadow border h5">
-                    <p>
-                        <b>Yeat</b> used special move Thunderbolt! 
-                    </p> 
-                    <p>
-                        <b>KANKAN</b> cursed out SEPTEMBERSRICH!!
-                    </p>
-                    <p>
-                        <b>SEPTEMBERSRICH</b> is thinking...
-                    </p>
+                <div class="flex-grow-1 p-3 bg-dark mb-4 rounded shadow border h5" style="overflow-y: scroll;">
+                    <p v-for="msg of scene?.messages" :key="msg.message"><b>[{{ getCharacterFromId(msg.userId)?.name }}]</b> {{ msg.message }}</p>
                 </div>
                 <div style="position: relative;">
                     <textarea placeholder="What's your move?" v-model.trim="prompt" style="resize: none;"

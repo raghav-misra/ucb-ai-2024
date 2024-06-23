@@ -13,6 +13,7 @@ const view = {
 
 const wsClient = useWSClient();
 const gameRoomState = useGameRoomState();
+const userId = useUserId();
 
 onMounted(async () => {
     //@ts-ignore
@@ -32,7 +33,7 @@ onMounted(async () => {
     });
 
     wsClient.value.room.send("NEW_CHARACTER", {
-        userId: "69",
+        userId: userId.value,
         name: "twizz",
         currency: 0,
         health: 100,
@@ -63,7 +64,7 @@ onMounted(async () => {
 <style>
 .region * {
     font-family: "VT323", sans-serif !important;
-    color: white !important;
+    color: white;
 }
 </style>
 

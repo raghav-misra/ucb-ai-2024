@@ -117,9 +117,13 @@ export interface IGameScene {
 export interface IGameRoomState {   
     currentPlayerId: string;
     characters: IGameCharacter[];
+    scenes: IGameScene[],
 }
+
+export const useUserId = () => useState<string>("userId", () => "69");
 
 export const useGameRoomState = () => useState<IGameRoomState>("gameState", () => ({
     currentPlayerId: "",
     characters: [],
+    scenes: [],
 }));
