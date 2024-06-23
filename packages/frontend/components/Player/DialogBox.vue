@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { dialogOptions, hideDialog } = useDialog();
+const { dialogOptions, hideDialog, messageQueue } = useDialog();
 
 const emit = defineEmits<{
     (e: "ok"): void;    
@@ -7,10 +7,10 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <div class="dialog-box-container" v-if="dialogOptions.isOpen">
+    <div class="dialog-box-container" v-if="messageQueue.length > 0">
         <div class="dialog-box p-4 bg-black text-center">
-            <h2>{{ dialogOptions.title }}</h2>
-            <h4 class="fst-italic">{{ dialogOptions.text }}</h4>
+            <h2>{{ messageQueue[0].characterName }}</h2>
+            <h4 class="fst-italic">{{ messageQueue[0].message }}</h4>
 
             <button class="btn btn-black btn-lg" @click="hideDialog">[ okay ]</button>
         </div>

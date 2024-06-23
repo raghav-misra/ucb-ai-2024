@@ -10,10 +10,16 @@ import type { CoreTool } from "ai";
 import { injectSeed, nameToID, randInt } from "../../utils.ts";
 import { SceneManager } from "./SceneManager.ts";
 import { match } from "fuzzyjs";
+import { IBuilderState } from "../../../routes/init.ts";
+import { generateImage } from "../../../routes/sdxl.ts" 
 
 interface WorldConfig {
-    dbName: string
-    stats: keyof Character[]
+    dbName: string,
+    builderState: IBuilderState,
+    stats: keyof Character[],
+    player: {
+        name: string;
+    },
     difficulty: {
         'Very Easy': number,
         'Easy': number,
@@ -22,7 +28,7 @@ interface WorldConfig {
         'Very Hard': number
         'Nearly Impossible': number,
         'FORCE FAIL': number
-    }
+    },
 }
 type Difficuty = keyof WorldConfig['difficulty']
 
@@ -54,6 +60,8 @@ export class World {
         scene_id: null as number | null
     }
 
+    broadcast:any
+
 
     helpers = {
         fetchLocationDetails: (locationID: number) => {
@@ -83,7 +91,7 @@ export class World {
 
     //Init API
     async init() {
-        this.db = await loadDB(this.config.dbName);
+        this.db = await loadDB(this.config.dbName, this.config.builderState, this.config.player);
         await this.reload()
         if (this.players.size === 0) throw new Error('No players found in the database. Please add a player character before starting the game.')
         await this.scenes.restoreActiveScenes()
@@ -185,9 +193,13 @@ export class World {
                     const result = await genJSON({
                         thread,
                         schema: RegionInsertZod,
-                        provider: 'groq'
+                        provider: 'openai'
                     })
-                    const seededResult = injectSeed(result)
+                    const seededResult = injectSeed(result) as Region
+
+                    const imageUrl = await generateImage(result.geographic_traits,'bg')
+
+                    seededResult.landscape = imageUrl
 
                     const newRegion = await this.db.insert(region).values(seededResult)
                         .returning()
@@ -213,10 +225,14 @@ export class World {
                     const result = await genJSON({
                         thread,
                         schema: CityInsertZod,
-                        provider: 'groq'
+                        provider: 'openai'
                     })
 
-                    const seededResult = injectSeed(result)
+                    const seededResult = injectSeed(result) as City
+
+                    const imageUrl = await generateImage(seededResult.geographic_traits, 'normal')
+
+                    seededResult.landscape = imageUrl;
 
                     const newCity = await this.db.insert(city).values({
                         ...seededResult,
@@ -244,9 +260,13 @@ export class World {
                     const result = await genJSON({
                         thread,
                         schema: LocationInsertZod,
-                        provider: 'groq'
+                        provider: 'openai'
                     })
-                    const seededResult = injectSeed(result)
+                    const seededResult = injectSeed(result) as Location
+
+                    const imageUrl = await generateImage(result.physical_traits,'normal')
+
+                    seededResult.landscape = imageUrl
 
                     const newLocation = await this.db.insert(location).values({
                         ...seededResult,
@@ -309,9 +329,13 @@ export class World {
                     const result = await genJSON({
                         thread,
                         schema: LocationInsertZod,
-                        provider: 'groq'
+                        provider: 'openai'
                     })
-                    const seededResult = injectSeed(result)
+                    const seededResult = injectSeed(result) as Location
+
+                    const imageUrl = await generateImage(seededResult.physical_traits,"normal")
+
+                    seededResult.landscape;
 
                     const newLocation = await this.db.insert(location).values({
                         ...seededResult,
@@ -338,16 +362,22 @@ export class World {
                     const result = await genJSON({
                         thread,
                         schema: CharacterInsertZod,
-                        provider: 'groq'
+                        provider: 'openai'
                     })
-                    const seededResult = injectSeed(result)
+                    const seededResult = injectSeed(result) as Character
+
+                   
+
+                    const imageUrl = await generateImage("headshot avatar "+ seededResult.physical_traits,'avatar');
+                    seededResult.headshot = imageUrl;
 
                     const newCharacter = await this.db.insert(character).values({
-                        role: 'NPC',
                         ...seededResult,
-                        location_id: locationId
+                        location_id: locationId,
+                        role: 'NPC'
                     })
-                        .returning()
+                    .returning()
+                    
 
                     this.players.set(newCharacter[0].id, newCharacter[0])
 
@@ -367,12 +397,18 @@ export class World {
                     const result = await genJSON({
                         thread,
                         schema: ItemInsertZod,
-                        provider: 'groq'
+                        provider: 'openai'
                     })
-                    const seededResult = injectSeed(result)
+                    const seededResult = injectSeed(result) as Item
+
+                    const imageUrl = await generateImage('game icon ' + seededResult.physical_traits,'icon')
+
+                    seededResult.image = imageUrl
+                    
 
                     const newItem = await this.db.insert(item).values(seededResult)
                         .returning()
+                    
 
                     this.items.set(nameToID(newItem[0].name), newItem[0])
                     return newItem[0]
@@ -391,10 +427,14 @@ export class World {
                     const result = await genJSON({
                         thread,
                         schema: SkillInsertZod,
-                        provider: 'groq'
+                        provider: 'openai'
                     })
-                    const seededResult = injectSeed(result)
+                    const seededResult = injectSeed(result) as Skill
+                    const imageUrl = await generateImage('abllity icon ' + seededResult.description,'icon')
 
+                    seededResult.icon = imageUrl;
+
+    
                     const newSkill = await this.db.insert(skill).values(seededResult)
                         .returning()
                     this.skills.set(nameToID(newSkill[0].name), newSkill[0])
@@ -508,46 +548,33 @@ export class World {
                 }),
                 execute: async ({ location, characterID }) => {
                     const character = this.players.get(characterID);
-                    if (!character) return "Unknown character ID";
-                    if (character?.energy < 10) {
-                        return `${character.name} does not have enough energy to travel.`;
-                    }
-
-                    //FUZ
                     if (!character) return;
 
                     const currentLocation = this.helpers.fetchLocationDetails(character.location_id);
-
-
-                    const validLocations: Location[] = [];
+                    const currentCityID = currentLocation.city?.id
+                    const allLocations = Array.from(this.locations.values())
+                    const validLocationIds: number[] = [];
 
                     // option 1: in the same city
                     for (let loc of this.locations.values()) {
                         if (loc.city_id === currentLocation.city?.id) {
-                            validLocations.push(loc);
+                            validLocationIds.push(loc.id);
                         }
                     }
 
-                    // option 2: on an edge of the city
-                    for (let loc of this.locations.values()) {
-                        if (loc.city_edge_id) {
-                            const edges = await this.db.select()
-                                .from(cityEdge)
-                                .where(eq(cityEdge.id, currentLocation.location.city_edge_id as number))
-                                .limit(1)
-                                .execute();
-
-                            if (edges.length > 0 && character) {
-                                const edge = edges[0];
-                                const fromLocationDetails = this.helpers.fetchLocationDetails(character?.location_id);
-                                if (edge.city_id_1 === currentLocation.city?.id
-                                    || edge.city_id_2 === currentLocation.city?.id) {
-                                    validLocations.push(loc);
-                                }
-                            }
+                    // option 2: connected city
+                    const connectedCities = Array.from(this.cityEdgeList.get(currentCityID) ?? new Map())
+                    .map(cID=>this.cities.get(cID))
+                    for (const city of connectedCities) {
+                        if(!city) continue
+                        const locationsInCity = allLocations.filter(l=>l.city_id===city.id)
+                        for (const location of locationsInCity) {
+                            validLocationIds.push(location.id)
                         }
                     }
-                    validLocations; // this thing
+
+                    const validLocations = validLocationIds.map(id=>this.locations.get(id))
+                    
 
                     const scoredLocations = validLocations.map(loc => ({
                         loc,
@@ -619,8 +646,8 @@ export class World {
                     if (!character) return;
 
                     const currentLocation = this.helpers.fetchLocationDetails(character.location_id);
-
-
+                    const currentCityID = currentLocation.city?.id
+                    const allLocations = Array.from(this.locations.values())
                     const validLocationIds: number[] = [];
 
                     // option 1: in the same city
@@ -630,23 +657,14 @@ export class World {
                         }
                     }
 
-                    // option 2: on an edge of the city
-                    for (let loc of this.locations.values()) {
-                        if (loc.city_edge_id) {
-                            const edges = await this.db.select()
-                                .from(cityEdge)
-                                .where(eq(cityEdge.id, currentLocation.location.city_edge_id as number))
-                                .limit(1)
-                                .execute();
-
-                            if (edges.length > 0 && character) {
-                                const edge = edges[0];
-                                const fromLocationDetails = this.helpers.fetchLocationDetails(character?.location_id);
-                                if (edge.city_id_1 === currentLocation.city?.id
-                                    || edge.city_id_2 === currentLocation.city?.id) {
-                                    validLocationIds.push(loc.id);
-                                }
-                            }
+                    // option 2: connected city
+                    const connectedCities = Array.from(this.cityEdgeList.get(currentCityID) ?? new Map())
+                    .map(cID=>this.cities.get(cID))
+                    for (const city of connectedCities) {
+                        if(!city) continue
+                        const locationsInCity = allLocations.filter(l=>l.city_id===city.id)
+                        for (const location of locationsInCity) {
+                            validLocationIds.push(location.id)
                         }
                     }
 
@@ -888,6 +906,13 @@ export class World {
                         if (!localInventory) return;
 
                         localInventory.set(item.id, Math.max(0, (localInventory.get(item.id) || 0) + amount))
+                        this.broadcast('GOT_ITEM',{
+                            characterID: character_id,
+                            itemID: item.id,
+                            itenName: item.name,
+                            amount: localInventory.get(item.id),
+                            image: item.image
+                        })
                         console.log(`Attempting to add ROW,`, {
                             character_id: character_id,
                             item_id: item.id,
@@ -908,7 +933,7 @@ export class World {
 
                     return { success: true }
                 } catch (e) {
-                    console.log(e)
+                   // console.log(e)
 
                 }
 
@@ -956,7 +981,7 @@ export class World {
 
                     return { success: true }
                 } catch (e) {
-                    console.log(e)
+                    //console.log(e)
 
                 }
 

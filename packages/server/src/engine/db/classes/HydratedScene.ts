@@ -3,9 +3,12 @@ import { type Character, type Scene, type MessageWithCharacter, character, messa
 import type { World } from "./World.ts";
 import { Thread, genJSON, genText } from "../../ai/index.ts";
 import { z } from "zod";
+import { Scene as networkedScene, Message as networkedMessage } from "../../../rooms/schema/MyRoomState.ts";
 
 export class HydratedScene {
     scene: Scene;
+    networkedScene: networkedScene;
+    broadcast:any;
     world: World
     thread = new Thread()
 
@@ -140,6 +143,22 @@ export class HydratedScene {
 
     //Message Management
     async saveMessage(characterID: number | null, content: string) {
+        if(this.networkedScene && characterID && !content.startsWith('###')){
+            this.networkedScene.messages.push(new networkedMessage({
+                userId: characterID,
+                message: content
+            }))
+            const charInfo = this.characters.find(c => c.id === characterID)
+            const splitSentences = content.split('.')
+            for (const sentence of splitSentences) {
+                this.broadcast('NEW_MESSAGE', {
+                    characterID,
+                    characterName:charInfo.name,
+                    message: sentence.trim() + '.'
+                })
+                await new Promise(resolve => setTimeout(resolve, 100))
+            }
+        }
         await this.world.db.insert(message).values({
             character_id: characterID,
             scene_id: this.scene.id,
@@ -221,17 +240,19 @@ export class HydratedScene {
 
         const result = await genText({
             thread: this.thread,
-            provider: 'groq'
+            provider: 'openai'
         })
 
         this.thread.add('user', formatCharacterMessage(this.activeCharacter, `*${result}*`))
         await this.saveMessage(this.activeCharacter.id, `*${result}*`)
-        console.log(result)
+        //console.log(result)
         return result
     }
 
     async playerInput(message: string) {
+        if(!this.activeCharacter) return;
         const startingPlayerLocationID = this.activeCharacter.location_id
+        
         /*
         //PARSE INTENT
         const intentThread = new Thread()
@@ -257,7 +278,7 @@ export class HydratedScene {
                 itemName:z.string().describe('The name of the item being used, if any.'),
                 skillName:z.string().describe('The name of the skill being used, if any.'),
             }),
-            provider: 'groq'
+            provider: 'openai'
         })
               
         console.log(intent) */
@@ -290,7 +311,7 @@ export class HydratedScene {
 
         await genText({
             thread: validationThread,
-            provider: 'groq',
+            provider: 'openai',
             tools: {
                 ...this.world.tools.validate,
             },
@@ -334,7 +355,7 @@ export class HydratedScene {
 
         const result = await genText({
             thread: this.thread,
-            provider: 'groq',
+            provider: 'openai',
             tools: {
                 ...this.world.tools.actions,
             }
@@ -343,7 +364,7 @@ export class HydratedScene {
         this.thread.add('user', formatCharacterMessage(this.activeCharacter, `*${message}*`))
         await this.saveMessage(this.activeCharacter.id, message)
         await this.saveMessage(this.activeCharacter.id, `*${result}*`)
-        console.log(result)
+       // console.log(result)
 
         //APPLY EFFECTS =======================
         const effectThread = new Thread()
@@ -378,11 +399,11 @@ export class HydratedScene {
 
         await genText({
             thread: effectThread,
-            provider: 'groq',
+            provider: 'openai',
             tools
         })
         this.turnQueue.shift()
-        console.log(`TURN DONE: queue is now:${this.turnQueue}`)
+        console.log(`TURN DONE: next up:${this.turnQueue[0]?.name}`)
 
         return {
             success: true,
@@ -413,7 +434,7 @@ export class HydratedScene {
 
         const result = await genText({
             thread: npcResponseThread,
-            provider: 'groq',
+            provider: 'openai',
             max_tokens: 500
         })
 

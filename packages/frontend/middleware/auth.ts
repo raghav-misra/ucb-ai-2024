@@ -1,6 +1,6 @@
 export default defineNuxtRouteMiddleware(() => {
     const user = useUser();
-    if (user.value.userId === "") {
-        return navigateTo("/auth");
+    if (user.value.userId === -1) {
+        return navigateTo("/auth");  
     }
 });

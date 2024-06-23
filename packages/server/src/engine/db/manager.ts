@@ -1,71 +1,98 @@
-import { drizzle } from "drizzle-orm/bun-sqlite";
+import { BunSQLiteDatabase, drizzle } from "drizzle-orm/bun-sqlite";
 import { Database } from "bun:sqlite";
 import { migrate } from "drizzle-orm/bun-sqlite/migrator";
 import { city, region, character, location } from "./schema";
 import * as schema from "./schema.ts";
+import { IBuilderState } from "../../routes/init.ts";
+import { randInt } from "../utils.ts";
 
 export type Schema = typeof schema;
 
-export const loadDB = async (path: string) => {
-    const pathToDB = `./data/${path}.sqlite`;
+export const loadDB = async (path: string, config: IBuilderState, player: {
+    name: string
+}) => {
+    const pathToDB = path;
+    console.log(pathToDB);
     const fileExists = await (Bun.file(pathToDB)).exists();
     const sqlite = new Database(pathToDB);
     const db = drizzle(sqlite, { schema });
 
     //Init the database if new
     if (!fileExists) {
-        await initDatabase(db);
+        await initDatabase(db, config, player);
     }
 
     return db;
 }
 
-const initDatabase = async (db: any) => {
+const initDatabase = async <T extends Record<string, unknown>>(db: BunSQLiteDatabase<T>, config: IBuilderState, player: {
+    name: string
+}) => {
     await migrate(db, { migrationsFolder: "./drizzle" });
 
-    //Insert default data
-    await db.insert(region).values({
-        name: "Battle Island",
-        geographic_traits: "A large island with dense cities",
-        development_traits: "A high-tech island with advanced infrastructure",
-        random: "It was once a peaceful island, but now it's a battlefield.",
-        seed: 0
-    })
-
-    await db.insert(city).values({
-        name: "Titled Towers",
-        geographic_traits: "A group of towers in the center of the island",
-        development_traits: "The largest city on the island, with advanced infrastructure and a large population",
-        random: "The city is a hub of activity, with a large population and advanced infrastructure.",
-        region_id: 1,
-        seed: 0
-    })
-
-    await db.insert(location).values({
-        name: "The Great Hall",
-        physical_traits: "A large, ornate hall with intricate carvings and a grand staircase",
-        development_traits: "The main metro hub for the island",
-        city_id: 1,
-        seed: 0
-    })
-
-    await db.insert(location).values({
-        name: "Open Shop",
-        physical_traits: "A small shop with a variety of items",
-        development_traits: "A shop that sells a variety of items",
-        city_id: 1,
-        seed: 0
-    })
-
-
     await db.insert(character).values({
+        name: player.name,
+        random: "",
+        seed: 69,
+        health: config.character.initialHealth,
+        intelligence: config.character.initialIntelligence,
+        charisma: config.character.initialCharisma,
+        constitution: config.character.initialConstitution,
         role: "PLAYER",
-        name: "Baze Barvis",
-        physical_traits: "An average human male with a beard and a scar on his forehead",
-        personality_traits: "A friendly and outgoing person, but also a bit of a loner",
-        random: "Formerlly a soldier, now a civilian, Baze is a kind and friendly person who enjoys spending time with his friends.",
-        runtime_context: "",
-        seed: 0,
+        physical_traits: config.character.physicalTraits,
+        personality_traits: config.character.personalityTraits,
+        strength: config.character.initialStrength,
+        energy: config.character.initialEnergy,
+        currency: config.character.initialCurrency,
+        dexterity: config.character.initialDexterity,
+        wisdom: config.character.initialWisdom,
         location_id: 1,
-    })
+        scene_id: null,
+    });
+
+    // stuff db with locations
+    const cityNameIdMap: Record<string, number> = {}
+
+    for (let regionClientSide of config.regions) {
+        const regionDb = (await db.insert(region).values({
+            name: regionClientSide.name,
+            geographic_traits: regionClientSide.geographicTraits,
+            development_traits: regionClientSide.developmentTraits,
+            random: "",
+            seed: 0
+        }).returning())[0];
+
+        for (let cityClientSide of regionClientSide.cities) {
+            const cityDb = (await db.insert(city).values({
+                name: cityClientSide.name,
+                geographic_traits: cityClientSide.geographicTraits,
+                development_traits: cityClientSide.developmentTraits,
+                random: "",
+                region_id: regionDb.id,
+                seed: 1
+            }).returning())[0];
+
+            cityNameIdMap[cityClientSide.name] = cityDb.id;
+
+            for (let city2 of cityClientSide.connectedCities) {
+                if (city2 in cityNameIdMap) {
+                    await db.insert(schema.cityEdge).values({
+                        city_id_1: cityNameIdMap[city2],
+                        city_id_2: cityDb.id,
+                        distance: randInt(1, 10)
+                    });
+                }
+            }
+
+            for (const poiClientSide of cityClientSide.pois) {
+                const poiDb = (await db.insert(location).values({
+                    name: poiClientSide.name,
+                    physical_traits: poiClientSide.physicalTraits,
+                    development_traits: poiClientSide.developmentTraits,
+                    city_id: cityDb.id,
+                    seed: 2
+                }));
+            }
+        }
+    }
 }

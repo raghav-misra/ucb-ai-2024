@@ -2,7 +2,7 @@ import { Schema, type, ArraySchema, MapSchema } from "@colyseus/schema";
 
 export class Character extends Schema {
     @type("string") name: string;
-    @type("string") userId: string;
+    @type("number") userId: number;
 
     // stats
     @type("number") currency: number;
@@ -15,26 +15,34 @@ export class Character extends Schema {
     @type("number") charisma: number;
     @type("number") energy: number;
 
-    @type("string") sceneId: string; // reference to the scene they're in.
+    @type("number") sceneId: number; // reference to the scene they're in.
 
     @type("string") city: string;
     @type("string") region: string;
+
+    @type("string") headshot: string;
 }
 
 export class Message extends Schema {
-    @type("string") userId: string;
+    @type("number") userId: string;
     @type("string") message: string;
 }
 
 export class Scene extends Schema {
-    @type("string") sceneId: string;
+    @type("number") sceneId: number;
     @type("string") sceneType: string; 
+    @type("string") regionImage: string;
+    @type("string") cityImage: string;
+    @type("string") locationImage: string;
+    @type("string") cityString: string;
+    @type("string") regionString: string;
+    @type("string") locationString:string
     @type([Message]) messages = new ArraySchema<Message>();
 }
     
 export class MyRoomState extends Schema {
-    @type({ map: "string" }) sessionUserIdMap = new MapSchema<string>();
-    @type("string") currentUserId: string; // the id of whoever's turn it is
+    @type({ map: "number" }) sessionUserIdMap = new MapSchema<string>();
+    @type("number") currentUserId: number; // the id of whoever's turn it is
     @type([Character]) characters = new ArraySchema<Character>(); // info on all characters
     @type([Scene]) scenes = new ArraySchema<Scene>();
 }

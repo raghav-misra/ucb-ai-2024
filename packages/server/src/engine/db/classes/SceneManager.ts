@@ -4,7 +4,9 @@ import { HydratedScene } from "./HydratedScene";
 import { World } from "./World";
 import { Thread, genText } from "../../ai";
 import dedent from "dedent";
+import { MyRoomState } from "../../../rooms/schema/MyRoomState";
 import readline from 'node:readline/promises';
+import { generateImage } from "../../../routes/sdxl.ts"
 
 async function prompt(message: string, validator: (input: string) => string | undefined): Promise<string | undefined> {
     process.stdout.write(`\x1b[36m❯ ${message}: \x1b[0m\n`);
@@ -74,6 +76,23 @@ export class SceneManager {
         if (options.type === 'DEFAULT' && charactersToAdd.filter(c => c.role === 'NPC').length === 0) {
             console.log(`Loading Location....`)
             const details = await this.world.helpers.fetchLocationDetails(options.location_id)
+
+            //Add images to region/city/location if it doesn't exist
+            if(details.region && !details.region?.landscape){
+                const imageUrl = await generateImage(details.region.geographic_traits,'bg')
+                this.world.regions.get(details.region.id)!.landscape = imageUrl
+            }
+
+            if(details.city && !details.city?.landscape){
+                const imageUrl = await generateImage(details.city.geographic_traits, 'normal')
+                this.world.cities.get(details.city.id)!.landscape = imageUrl
+            }
+
+            if(details.location && !details.location?.physical_traits){
+                const imageUrl = await generateImage(details.location.physical_traits,'normal')
+                this.world.locations.get(details.location.id)!.landscape = imageUrl
+            }
+
             const generationThread = new Thread()
                 .add('system', dedent`
                 # MISSION 
@@ -94,7 +113,7 @@ export class SceneManager {
 
             await genText({
                 thread: generationThread,
-                provider: 'groq',
+                provider: 'openai',
                 tools: {
                     createNPC: this.world.tools.create.createNewCharacter
                 }
@@ -204,18 +223,58 @@ export class SceneManager {
         sceneToAdd.characters.push(characterToMove)
     }
 
-    async startGameLoop() {
-        const scenes = this.active.values()
-        for (const scene of scenes) {
+    currentScene: HydratedScene | null = null
+    sceneQueue: Array<HydratedScene> = []
+    networkedState
+    sync: () => void = () => { }
+
+    async playerInput(input: string) {
+        if (!this.currentScene) return;
+        await this.currentScene.playerInput(input)
+        this.sync()
+        while (!this.currentScene.queueEmpty()) {
+            const currentCharID = this.currentScene.activeCharacter.id
+            this.networkedState.currentUserId = currentCharID
+            const turnOver = await this.networkedState.nextTurn()
+            if (!turnOver) {
+                return;
+            }
+        }
+        for (const scene of this.sceneQueue) {
+            this.sceneQueue.shift();
             scene.refreshQueue()
             while (!scene.queueEmpty()) {
-                console.log(scene.turnQueue)
-                console.log(`STARTING NEXT TURN`)
+                this.currentScene = scene
+                const currentCharID = scene.activeCharacter.id
+                this.networkedState.currentUserId = currentCharID
                 const turnOver = await scene.nextTurn()
                 if (!turnOver) {
-                    const input = await prompt('What would you like to do?', (input) => undefined)
-                    await scene.playerInput(input as string)
+                    return;
+                }
+            }
+        }
 
+        this.startGameLoop(this.networkedState, this.sync)
+
+    }
+
+    async startGameLoop(networkedState:MyRoomState,sync:()=>void) {
+        const scenes = Array.from(this.active.values())
+        this.sync = sync
+        this.networkedState = networkedState
+        this.sceneQueue = scenes
+        for (const scene of scenes) {
+            console.log("OMG SCENE is0 ", scene)
+            this.sceneQueue.shift();
+            scene.refreshQueue()
+            while (!scene.queueEmpty()) {
+                sync()
+                this.currentScene = scene
+                const currentCharID = scene.activeCharacter.id
+                networkedState.currentUserId = currentCharID
+                const turnOver = await scene.nextTurn()
+                if (!turnOver) {
+                    return;
                 }
             }
         }

@@ -18,12 +18,28 @@ async function play(config: IBuilderState) {
 
     const name = username?.trim();
 
-    if (name) {
+    const res = await fetch("http://localhost:2567/init", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            userId: user.value.userId,
+            config,
+        })
+    });
+
+    const data = await res.json();
+
+    if (name && data.success) {
         gameInitialState.value = {
             name,
-            config
+            config,
+            dbName: data.dbName
         };
     }
+
+    navigateTo("/play");
 }
 
 definePageMeta({
