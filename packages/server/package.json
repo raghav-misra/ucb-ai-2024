@@ -28,7 +28,8 @@
     "mocha": "^10.2.0",
     "rimraf": "^5.0.0",
     "tsx": "^4.10.2",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "typings": "workspace:*"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.602.0",
