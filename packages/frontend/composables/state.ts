@@ -1,3 +1,5 @@
+import * as Colyseus from "colyseus.js";
+
 export interface IPoi {
     name: string;
     physicalTraits: string;
@@ -80,3 +82,11 @@ function getInitialBuilderState() {
 }
 
 export const useBuilderState = () => useState<IBuilderState>("builderState", () => getInitialBuilderState());
+
+export const useWSClient = () => useState<{
+    client: Colyseus.Client | null,
+    room: Colyseus.Room | null
+}>("wsClient", () => ({
+    client: null,
+    room: null,
+}));

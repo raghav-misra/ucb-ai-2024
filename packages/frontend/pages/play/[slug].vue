@@ -1,14 +1,47 @@
+<script setup lang="ts">
+import * as Colyseus from "colyseus.js";
+
+const wsClient = useWSClient();
+
+onMounted(async () => {
+    wsClient.value.client = new Colyseus.Client("ws://localhost:2567");
+    try {
+        wsClient.value.room = await wsClient.value.client.create("my_room");
+
+        //@ts-ignore
+        window._wsClient = wsClient.value;
+    } catch (ex) {
+        console.error("Couldn't connect to room:", ex);
+    }
+});
+
+const prompt = ref("");
+
+function sendPrompt(evt: KeyboardEvent) {
+    if (evt.shiftKey) return;
+
+    evt.preventDefault(); 
+
+    if (prompt.value === "") return; // no empty
+
+    wsClient.value.room?.send("prompt", prompt.value);
+    prompt.value = "";
+
+    return false;
+}
+</script>
+
 <template>
     <section class="region d-flex align-items-center justify-content-center">
         <div class="relaxed-box bg-black">
             <div class="city"></div>
             <div style="position: relative;">
-                <textarea style="resize: none;" class="lead input-box mb-0 bg-black p-4"></textarea>
+                <textarea placeholder="Type here..." v-model.trim="prompt" style="resize: none;" class="lead input-box mb-0 bg-black p-4" @keydown.enter="sendPrompt"></textarea>
                 <span class="enter-icon text-white d-flex align-items-center">↵</span>
             </div>
         </div>
 
-        <PlayerDialogBox />
+        <!-- <PlayerDialogBox /> -->
     </section>
 </template>
 
