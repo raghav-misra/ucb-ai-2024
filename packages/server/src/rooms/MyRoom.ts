@@ -7,8 +7,13 @@ export class MyRoom extends Room<MyRoomState> {
     onCreate(options: any) {
         this.setState(new MyRoomState());
 
-        this.onMessage("NEW_MESSAGE", (client, message) => {
+        this.onMessage("NEW_MESSAGE", (client, message: string) => {
             console.log("MESSAGE RECEIVED:", message);
+
+            if (message.startsWith("GOTO")) {
+                return client.send("GOTO", message.split("GOTO ")[1]);
+            }
+
             const sessionId = client.id;
             const userId = this.state.sessionUserIdMap.get(sessionId);
             

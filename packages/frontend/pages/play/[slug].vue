@@ -2,7 +2,7 @@
 import * as Colyseus from "colyseus.js";
 
 const view = {
-    curr: ref('battle'),
+    curr: ref('conversation'),
     go(loc: string) {
         this.curr.value = loc;
     },
@@ -52,6 +52,11 @@ onBeforeMount(async () => {
         sceneType: "default",
         messages: [],
     } as IGameScene);
+
+    wsClient.value.room.onMessage("GOTO", (message: string) => {
+        console.log(message);
+        view.go(message)
+    });
 });
 </script>
 
@@ -59,6 +64,7 @@ onBeforeMount(async () => {
     <section class="region d-flex align-items-center justify-content-center">
         <PlayerDefaultPage v-if="view.is('default')" />
         <PlayerBattlePage v-if="view.is('battle')" />
+        <PlayerConversationPage v-if="view.is('conversation')" />
 
         <PlayerDialogBox />
         <PlayerStatsCard />

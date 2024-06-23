@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const player = getCharacterSelf();
+const userId = useUserId();
+const player = computed(() => getCharacterFromId(userId.value));
 </script>
 
 <template>

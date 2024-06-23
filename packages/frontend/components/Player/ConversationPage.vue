@@ -20,22 +20,22 @@ const scene = computed(() => {
 <template>
     <div class="battle me-4 pe-4 d-flex flex-column align-items-stretch">
         <div class="bg-black text-center p-4 rounded shadow-lg">
-            <h3 class="text-danger mb-0">BATTLE</h3>
-            <h1 class="mb-0">It's Yeat's turn.</h1>
+            <h3 class="text-success mb-0">CONVERSATION</h3>
+            <h1 class="mb-0">Yeat is thinking...</h1>
         </div>
         <div class="city d-flex align-items-end mt-2 p-4 rounded shadow-lg">
-            <img class="avatar" src="~/assets/body.png">
-
             <div class="flex-grow-1 align-self-stretch d-flex flex-column">
                 <div class="flex-grow-1 p-3 bg-dark mb-4 rounded shadow border h5" style="overflow-y: scroll; opacity: 0.95;">
                     <p v-for="msg of scene?.messages" :key="msg.message"><b>[{{ getCharacterFromId(msg.userId)?.name }}]</b> {{ msg.message }}</p>
                 </div>
                 <div style="position: relative;">
-                    <textarea placeholder="What's your move?" v-model.trim="prompt" style="resize: none;"
+                    <textarea placeholder="What would you like to say?" v-model.trim="prompt" style="resize: none;"
                     class="lead rounded input-box mb-0 bg-black p-3" @keydown.enter="sendPrompt"></textarea>
                     <span class="enter-icon text-white d-flex align-items-center">↵</span>
                 </div>
             </div>
+
+            <img class="avatar" src="~/assets/body.png">
         </div>
     </div>
     <div class="player-imgs d-flex flex-column">
@@ -43,21 +43,18 @@ const scene = computed(() => {
             <img class="pfp" src="~/assets/yeat.jpg">
             <div class="ms-4">
                 <h1 class="mb-0 text-shadow">YEAT</h1>
-                <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP 18/20</p>
             </div>
         </div>
         <div class="d-flex align-items-center">
             <img class="pfp" src="~/assets/yeat.jpg">
             <div class="ms-4">
                 <h1 class="mb-0 text-shadow">SEPTEMBERSRICH</h1>
-                <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP 18/20</p>
             </div>
         </div>
         <div class="d-flex align-items-center">
             <img class="pfp" src="~/assets/yeat.jpg">
             <div class="ms-4">
                 <h1 class="mb-0 text-shadow">KANKAN</h1>
-                <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP 18/20</p>
             </div>
         </div>
     </div>
