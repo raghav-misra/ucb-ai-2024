@@ -2,6 +2,8 @@ import config from "@colyseus/tools";
 import { monitor } from "@colyseus/monitor";
 import { playground } from "@colyseus/playground";
 
+import { handler as sdxlHandler } from "./routes/sdxl";
+
 /**
  * Import your Room files
  */
@@ -22,9 +24,7 @@ export default config({
          * Bind your custom express routes here:
          * Read more: https://expressjs.com/en/starter/basic-routing.html
          */
-        app.get("/hello_world", (req, res) => {
-            res.send("It's time to kick ass and chew bubblegum!");
-        });
+        app.get("/sdxl", sdxlHandler);
 
         /**
          * Use @colyseus/playground
