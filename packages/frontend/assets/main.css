@@ -5,6 +5,9 @@
 
 * {
     font-family: Inter, sans-serif !important;
+    scroll-behavior: smooth;
+    scrollbar-color: black;
+    scrollbar-width: thin;
 }
 
 .page {
