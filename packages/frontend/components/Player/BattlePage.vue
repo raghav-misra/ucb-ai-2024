@@ -42,7 +42,7 @@ const scene = computed(() => {
     </div>
     <div class="player-imgs d-flex flex-column">
         <div class="d-flex align-items-center" v-for="character of gameRoomState.characters.filter(c=>c.userId !== gameRoomState.currentPlayerId) ">
-            <img class="pfp" :src="`localhost:58029/${character.headshot}`">
+            <img class="pfp" :src="`localhost:61923/${character.headshot}`">
             <div class="ms-4">
                 <h1 class="mb-0 text-shadow">{{ character.name }}</h1>
                 <p class="lead mb-0 bg-dark d-inline-block p-1 px-2 rounded">HP {{character.health}}/100</p>

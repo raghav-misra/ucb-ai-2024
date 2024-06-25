@@ -3,6 +3,6 @@ import { defineConfig } from "drizzle-kit";
 export default defineConfig({
   dialect: 'sqlite',
   dbCredentials: {
-    url: 'file:./data/db.sqlite',
+    url: 'file:./k.sqlite',
   }
 });

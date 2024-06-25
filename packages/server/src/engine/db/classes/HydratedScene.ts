@@ -81,7 +81,7 @@ export class HydratedScene {
             const activeCharID = this.activeCharacter.id
             const relationshipIDs = this.world.characterRelationshipEdgeList.get(activeCharID) || new Map()
 
-            const characterSummary = this.characters.map((character) => {
+            const characterSummary = Array.from(this.world.npcs.values()).map((character) => {
                 //Skip active character
                 if (character.id === activeCharID) return
 
